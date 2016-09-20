@@ -1,0 +1,52 @@
+//Dalton Cole
+//Class and section: CS153, A 
+//Date: 3/26/14
+//Description: four Dementional package for abstractpackage.h
+
+#ifndef FOUR_H
+#define FOUR_H
+
+#include "abstractpackage.h"
+//#include<iostream>
+//using namespace std;
+
+const float hypervolume = .01; //rate of 4D package
+const float weight = 3.14; //rate of 4D package's weight
+const float extra_charge = 42.42; //rate of extra demintional charge
+
+class four_d : public AbstractPackage
+{
+  private:
+    float m_length; //the length of the package
+    float m_width;  //the width of the package
+    float m_height; //the height of the package
+    float m_forthd; //the forth demention of the package
+    float m_weight; //the weight of the package
+    float m_charge; //total charge of package
+
+  public:
+  // Purpose: Constructor
+  // -- INLINE
+  four_d(string f, string t, float l, float w, float h, float d, float m) :
+   AbstractPackage(f,t), m_length(l), m_width(w), m_height(h), m_forthd(d), m_weight(m), 
+   m_charge((l*w*h*d*hypervolume)+(m*weight)+extra_charge){}
+
+  // Purpose: Returns the charge of a package.
+  // -- VIRTUAL
+  virtual float getCharge() const {return m_charge;}
+
+  // Purpose: Returns the package's sender.
+  // -- VIRTUAL
+  virtual string getFrom() const {return m_from;}
+
+  // Purpose: Returns the package's receiver.
+  // -- VIRTUAL
+  virtual string getTo() const {return m_to;}
+
+  // Purpose: Destructor
+  // -- Inline
+  virtual ~four_d() {}
+	
+};
+
+#endif

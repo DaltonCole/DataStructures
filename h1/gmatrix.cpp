@@ -1,0 +1,114 @@
+// Name: Cole, Dalton
+// Date: Feb. 7, 2014
+// Class and Section: CS153, A
+// Description: gmatrix.cpp file
+
+#include "gmatrix.h"
+
+GMatrix::GMatrix(int c, int r, int s, int d)
+{
+/*--------------------------------------------------
+  sets c to the member variable m_cols and sets
+  r to the member variable m_rows
+---------------------------------------------------*/
+  m_cols = c;
+  m_rows = r;
+
+/*----------------------------------------------------  
+  creates the user specified dimentions of the array
+---------------------------------------------------*/
+  m_data = new int *[m_cols];
+  for(int i = 0; i < m_cols; i++)
+  {
+    m_data[i] = new int [m_rows];
+  }
+/*---------------------------------------------------------------
+  Fills the dynamically allocated array with s seed and d step.
+  The column(1) row (1) has the value of s. Each column after s
+  in the same row is equal to the previous column + d.
+  Each row underneath the first is equal to the row above it + d.
+---------------------------------------------------------------*/ 
+  for(int i = 0; i < m_cols; i++)
+  {
+    for(int k = 0; k < m_rows; k++)
+    {
+      m_data[i][k] = (s + (d * (i+k)));
+    }
+  }
+}
+
+GMatrix::~GMatrix()
+{
+/*-------------------------------------------------------
+  First destoys each array of the 2D array, then deletes
+  the 1D array
+------------------------------------------------------*/
+  for(int i = 0; i < m_cols; i ++)
+    delete m_data[i];
+  delete [] m_data;
+}
+
+
+const GMatrix& GMatrix::operator = (const GMatrix& rhs)
+{
+/*-------------------------------------------------------------
+  Deletes the original array (just in case the original dimentions
+  were too large
+-----------------------------------------------------------------*/  
+  for(int i = 0; i < m_cols; i ++)
+  {
+    delete m_data[i];
+  }
+  delete [] m_data;
+  
+/*-------------------------------------------------------------------
+  sets the colums and rows to the same value of the rhs
+  ----------------------------------------------------------------*/
+  m_cols = rhs.m_cols;
+  m_rows = rhs.m_rows;
+
+/*----------------------------------------------------------------
+  creats the new 2D array and assigns values to it equal to the 
+  rhs array
+  --------------------------------------------------------------*/
+  m_data = new int *[m_cols];
+  for(int i = 0; i < m_cols; i++)
+  {
+    m_data[i] = new int [m_rows];
+    for(int k = 0; k < m_rows; k++)
+      m_data[i][k] = rhs.m_data[i][k];
+  }
+  
+  return *this;
+}
+
+GMatrix::GMatrix(const GMatrix & rhs)
+{
+/*-------------------------------------------------------------------
+  Creats the new 2D data array to the dimentions of the rhs array,
+  this is so when it is deleted, not too much is attempted to be deleted.
+  Then the lhs is handed off to the = operator.
+  --------------------------------------------------------------------*/
+  m_data = new int *[rhs.m_cols];
+  for (int i = 0; i < rhs.m_cols; i++)
+    m_data[i] = new int [m_rows];
+  *this = rhs;
+}
+
+std::ostream& operator<< (std::ostream& out, const GMatrix& gm)
+{
+/*---------------------------------------------------------------------
+  Outputs each value of the array, row by row, with '|' between each
+  value as a seperator.
+  ---------------------------------------------------------------------*/ 
+  for(int i = 0; i < gm.m_rows; i++)
+  {
+    out << "|";
+    for(int k = 0; k < gm.m_cols; k++)
+    {
+      out << gm.m_data[k][i] << "|";
+    }
+    out << std::endl;
+  }  
+  return out;
+}
